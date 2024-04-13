@@ -23,3 +23,6 @@ ruff = "^0.3.7"
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core"]
+
+[tool.poetry.scripts]
+restx = "restx.cli:app"
