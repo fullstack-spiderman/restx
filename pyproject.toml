@@ -4,7 +4,7 @@ description = "A CLI app for performing RESTX operations via HTTP requests."
 license = "MIT"
 name = "restx"
 readme = "README.md"
-version = "0.1.3"
+version = "0.1.4"
 
 [tool.poetry.dependencies]
 httpx = "^0.27.0"
