@@ -5,7 +5,7 @@ from typing import Any
 from httpx import Client, Response
 from rich.console import Console
 
-from labs.cli import HTTPMethod
+from restx.enums import HTTPMethod
 
 console = Console()
 DEFAULT_METHOD = "GET"
