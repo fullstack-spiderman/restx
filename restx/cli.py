@@ -1,5 +1,3 @@
-import json
-
 import typer
 from httpx import Client, Response
 from rich.console import Console
@@ -49,10 +47,12 @@ def put(
 def patch(
     url: str, payload: str = typer.Option(..., "--payload", "-p", help="Payload data")
 ) -> None:
-    """Send a POST request."""
-    with Client() as client:
-        response: Response = client.patch(url, json=json.loads(payload))
-    console.print(response.json(), style="bold green")
+    """Send a PATCH request."""
+    response, response_time = crud_manager(
+        url=url, method="PATCH", payload=payload
+    ).values()
+    print_additional_info(response, response_time)
+    print_response_body(response)
 
 
 @app.command()
