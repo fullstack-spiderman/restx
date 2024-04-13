@@ -40,3 +40,15 @@ def crud_manager(
     end_time: datetime = datetime.now()
     response_time: timedelta = end_time - start_time
     return {"response": response, "response_time": response_time}
+
+
+def format_response(response: Response, response_time) -> dict[str, Any]:
+    """Format the response information."""
+    return {
+        "Status Code": response.status_code,
+        "HTTP Method": response.request.method,
+        "URL": response.url,
+        "Response Time": response_time,
+        "Headers": response.headers,
+        "Body": response.json(),
+    }
