@@ -1,7 +1,9 @@
 import json
+
 import typer
 from httpx import Client, Response
 from rich.console import Console
+
 
 app = typer.Typer()
 console = Console()
