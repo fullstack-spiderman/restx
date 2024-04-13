@@ -25,5 +25,13 @@ def post(
     console.print(response.json(), style="bold green")
 
 
+@app.command()
+def delete(url: str, headers: str = None) -> None:
+    """Send a DELETE request."""
+    with Client() as client:
+        response: Response = client.delete(url)
+    console.print(response.json(), style="bold green")
+
+
 if __name__ == "__main__":
     app()
