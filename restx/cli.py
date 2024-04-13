@@ -26,6 +26,16 @@ def post(
 
 
 @app.command()
+def put(
+    url: str, payload: str = typer.Option(..., "--payload", "-p", help="Payload data")
+) -> None:
+    """Send a POST request."""
+    with Client() as client:
+        response: Response = client.put(url, json=json.loads(payload))
+    console.print(response.json(), style="bold green")
+
+
+@app.command()
 def delete(url: str, headers: str = None) -> None:
     """Send a DELETE request."""
     with Client() as client:
