@@ -1,3 +1,4 @@
+import json
 import typer
 from httpx import Client, Response
 from rich.console import Console
@@ -11,6 +12,16 @@ def get(url: str) -> None:
     """Send a GET request."""
     with Client() as client:
         response: Response = client.get(url)
+    console.print(response.json(), style="bold green")
+
+
+@app.command()
+def post(
+    url: str, payload: str = typer.Option(..., "--payload", "-p", help="Payload data")
+) -> None:
+    """Send a POST request."""
+    with Client() as client:
+        response: Response = client.post(url, json=json.loads(payload))
     console.print(response.json(), style="bold green")
 
 
