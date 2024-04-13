@@ -2,7 +2,6 @@
 authors = ["Arjun Umathanu"]
 description = "A CLI app for performing CRUD operations via HTTP requests."
 license = "MIT"
-license-file = "LICENSE"
 name = "crud"
 readme = "README.md"
 version = "0.1.0"
