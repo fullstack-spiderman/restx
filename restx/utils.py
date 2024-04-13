@@ -21,36 +21,37 @@ def crud_manager(
     start_time: datetime = datetime.now()
     CHOICE: str = method.upper()
     with Client() as client:
-        if CHOICE == HTTPMethod.GET.value:
-            response: Response = client.get(
-                url,
-                headers=json.loads(headers) if headers else headers,
-            )
-        elif CHOICE == HTTPMethod.POST.value:
-            response: Response = client.post(
-                url,
-                json=json.loads(payload),
-                headers=json.loads(headers) if headers else headers,
-            )
-        elif CHOICE == HTTPMethod.PUT.value:
-            response: Response = client.put(
-                url,
-                json=json.loads(payload),
-                headers=json.loads(headers) if headers else headers,
-            )
-        elif CHOICE == HTTPMethod.PATCH.value:
-            response: Response = client.patch(
-                url,
-                json=json.loads(payload),
-                headers=json.loads(headers) if headers else headers,
-            )
-        elif CHOICE == HTTPMethod.DELETE.value:
-            response: Response = client.delete(
-                url,
-                headers=json.loads(headers) if headers else headers,
-            )
-        else:
-            raise ValueError(f"Unsupported HTTP method: {method}")
+        match CHOICE:
+            case HTTPMethod.GET.value:
+                response: Response = client.get(
+                    url,
+                    headers=json.loads(headers) if headers else headers,
+                )
+            case HTTPMethod.POST.value:
+                response: Response = client.post(
+                    url,
+                    json=json.loads(payload),
+                    headers=json.loads(headers) if headers else headers,
+                )
+            case HTTPMethod.PUT.value:
+                response: Response = client.put(
+                    url,
+                    json=json.loads(payload),
+                    headers=json.loads(headers) if headers else headers,
+                )
+            case HTTPMethod.PATCH.value:
+                response: Response = client.patch(
+                    url,
+                    json=json.loads(payload),
+                    headers=json.loads(headers) if headers else headers,
+                )
+            case HTTPMethod.DELETE.value:
+                response: Response = client.delete(
+                    url,
+                    headers=json.loads(headers) if headers else headers,
+                )
+            case _:
+                raise ValueError(f"Unsupported HTTP method: {method}")
     end_time: datetime = datetime.now()
     response_time: timedelta = end_time - start_time
     return {"response": response, "response_time": response_time}
