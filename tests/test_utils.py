@@ -92,3 +92,25 @@ def test_crud_manager_patch(httpx_mock: HTTPXMock) -> None:
     assert result["response"].status_code == 200
     assert isinstance(result["response_time"], timedelta)
     assert result["response"].json() == response_data
+
+
+def test_crud_manager_delete(httpx_mock: HTTPXMock) -> None:
+    # Arrange
+    url = "https://example.com/4"
+    headers: dict[str, str] = {"Authorization": "Bearer token"}
+    response_data: dict[str, str] = {}
+    httpx_mock.add_response(
+        method="DELETE", status_code=204, url=url, json=response_data
+    )
+
+    # Act
+    result: dict[str, Any] = crud_manager(
+        url=url,
+        method=HTTPMethod.DELETE.value,
+        headers=json.dumps(headers),
+    )
+
+    # Assert
+    assert result["response"].status_code == 204
+    assert isinstance(result["response_time"], timedelta)
+    assert result["response"].json() == response_data
