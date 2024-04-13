@@ -1,8 +1,8 @@
 [tool.poetry]
 authors = ["Arjun Umathanu"]
-description = "A CLI app for performing CRUD operations via HTTP requests."
+description = "A CLI app for performing RESTX operations via HTTP requests."
 license = "MIT"
-name = "crud"
+name = "restx"
 readme = "README.md"
 version = "0.1.0"
 

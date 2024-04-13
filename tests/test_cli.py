@@ -1,4 +1,4 @@
-from crud.cli import get
+from restx.cli import get
 
 from pytest_httpx import HTTPXMock
 

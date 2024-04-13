@@ -1,2 +1,2 @@
-# CRUD
-CRUD - A CLI app for performing CRUD operations via HTTP/HTTPS requests.
+# RESTX
+RESTX - A CLI app for performing RESTX operations via HTTP/HTTPS requests.
