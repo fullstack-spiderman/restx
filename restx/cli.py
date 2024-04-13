@@ -26,9 +26,11 @@ def post(
     url: str, payload: str = typer.Option(..., "--payload", "-p", help="Payload data")
 ) -> None:
     """Send a POST request."""
-    with Client() as client:
-        response: Response = client.post(url, json=json.loads(payload))
-    console.print(response.json(), style="bold green")
+    response, response_time = crud_manager(
+        url=url, method="POST", payload=payload
+    ).values()
+    print_additional_info(response, response_time)
+    print_response_body(response)
 
 
 @app.command()
