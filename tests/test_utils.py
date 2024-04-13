@@ -6,9 +6,7 @@ from pytest_httpx import HTTPXMock
 
 import restx
 import restx.enums
-from restx.utils import (
-    crud_manager,
-)
+from restx.utils import crud_manager
 
 
 @pytest.fixture
