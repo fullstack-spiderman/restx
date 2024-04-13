@@ -60,3 +60,15 @@ def print_additional_info(response: Response, response_time) -> None:
     """Print additional information at the top."""
     additional_info: str = f"Status Code: {response.status_code}\nHTTP Method: {response.request.method}\nURL: {response.url}\nResponse Time: {response_time}\nHeaders: {response.headers}\n\n"
     console.print(additional_info, style="bold magenta")
+
+
+def print_response_body(response: Response) -> None:
+    """Print the response body separately."""
+    try:
+        data = response.json()
+        console.print(data, style="bold green")
+    except json.JSONDecodeError as e:
+        console.print(f"Error decoding JSON: {e}", style="bold red")
+        console.print(f"Raw response content: {response.content}", style="bold red")
+        console.print(f"Response status code: {response.status_code}", style="bold red")
+        console.print(f"Response headers: {response.headers}", style="bold red")
