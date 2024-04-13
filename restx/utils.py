@@ -3,9 +3,11 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from httpx import Client, Response
+from rich.console import Console
 
 from labs.cli import HTTPMethod
 
+console = Console()
 DEFAULT_METHOD = "GET"
 
 
@@ -52,3 +54,9 @@ def format_response(response: Response, response_time) -> dict[str, Any]:
         "Headers": response.headers,
         "Body": response.json(),
     }
+
+
+def print_additional_info(response: Response, response_time) -> None:
+    """Print additional information at the top."""
+    additional_info: str = f"Status Code: {response.status_code}\nHTTP Method: {response.request.method}\nURL: {response.url}\nResponse Time: {response_time}\nHeaders: {response.headers}\n\n"
+    console.print(additional_info, style="bold magenta")
