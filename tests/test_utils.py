@@ -50,7 +50,7 @@ def test_crud_manager_post(httpx_mock: HTTPXMock) -> None:
 
 def test_crud_manager_put(httpx_mock: HTTPXMock) -> None:
     # Arrange
-    url = "https://example.com"
+    url = "https://example.com/5"
     payload: dict[str, str] = {"key": "value"}
     headers: dict[str, str] = {"Authorization": "Bearer token"}
     response_data: dict[str, str] = {"status": "success"}
@@ -72,7 +72,7 @@ def test_crud_manager_put(httpx_mock: HTTPXMock) -> None:
 
 def test_crud_manager_patch(httpx_mock: HTTPXMock) -> None:
     # Arrange
-    url = "https://example.com"
+    url = "https://example.com/13"
     payload: dict[str, str] = {"key": "value"}
     headers: dict[str, str] = {"Authorization": "Bearer token"}
     response_data: dict[str, str] = {"status": "success"}
