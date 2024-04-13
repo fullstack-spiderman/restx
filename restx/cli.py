@@ -4,17 +4,21 @@ import typer
 from httpx import Client, Response
 from rich.console import Console
 
+from restx.utils import crud_manager, print_additional_info, print_response_body
+
 
 app = typer.Typer()
 console = Console()
 
 
 @app.command()
-def get(url: str) -> None:
+def get(url: str, headers: str = None) -> None:
     """Send a GET request."""
-    with Client() as client:
-        response: Response = client.get(url)
-    console.print(response.json(), style="bold green")
+    response, response_time = crud_manager(
+        url=url, method="GET", headers=headers
+    ).values()
+    print_additional_info(response, response_time)
+    print_response_body(response)
 
 
 @app.command()
