@@ -1,20 +1,20 @@
-## RESTX
+# RESTX
 
 [![CI/CD](https://github.com/fullstack-spiderman/restx/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/fullstack-spiderman/restx/actions/workflows/ci.yml)
 
-#### Description
+## Description
 
 A Python CLI application for sending HTTP requests using different methods (GET, POST, PUT, PATCH, DELETE).
 
-#### Installation
+### Installation
 
-##### Using pip
+#### Using pip
 
 ```bash
 pip install restx
 ```
 
-##### Or using poetry
+#### Or using poetry
 
 ```bash
 poetry add restx
