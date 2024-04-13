@@ -1,6 +1,23 @@
 [tool.poetry]
 authors = ["Arjun Umathanu"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
 description = "A CLI app for performing RESTX operations via HTTP requests."
+include = [
+  "LICENSE",
+]
 license = "MIT"
 name = "restx"
 readme = "README.md"
