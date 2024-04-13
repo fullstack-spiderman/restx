@@ -34,5 +34,12 @@ jobs:
           POETRY_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         run: |
           poetry config pypi-token.pypi $POETRY_PYPI_TOKEN
-          poetry build
-          poetry publish
+          set +e
+          poetry build || true
+          set -e
+          # Check if the error message contains "File already exists"
+          if [ $? -eq 1 ] && [[ $(poetry build 2>&1) == *"File already exists"* ]]; then
+            echo "Package with the same version already exists on PyPI.org. Skipping upload."
+          else
+            poetry publish
+          fi
