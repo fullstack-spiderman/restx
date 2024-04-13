@@ -1,5 +1,4 @@
 import typer
-from httpx import Client, Response
 from rich.console import Console
 
 from restx.utils import crud_manager, print_additional_info, print_response_body
@@ -58,9 +57,11 @@ def patch(
 @app.command()
 def delete(url: str, headers: str = None) -> None:
     """Send a DELETE request."""
-    with Client() as client:
-        response: Response = client.delete(url)
-    console.print(response.json(), style="bold green")
+    response, response_time = crud_manager(
+        url=url, method="DELETE", headers=headers
+    ).values()
+    print_additional_info(response, response_time)
+    print_response_body(response)
 
 
 if __name__ == "__main__":
