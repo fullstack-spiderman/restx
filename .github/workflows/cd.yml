@@ -1,7 +1,11 @@
-name: CI
+name: CD
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  pull_request:
     branches:
       - main
 
@@ -24,5 +28,11 @@ jobs:
           pip install poetry
           poetry install
 
-      - name: Run tests
-        run: poetry run pytest
+      - name: Build and publish to PyPI
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          POETRY_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          poetry config pypi-token.pypi $POETRY_PYPI_TOKEN
+          poetry build
+          poetry publish
