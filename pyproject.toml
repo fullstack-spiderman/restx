@@ -14,7 +14,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-description = "A CLI app for performing RESTX operations via HTTP requests."
+description = "A CLI app for performing REST API CRUD operations via HTTP/HTTPS requests."
 include = [
   "LICENSE",
 ]
