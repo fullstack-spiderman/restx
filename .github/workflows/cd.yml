@@ -29,7 +29,7 @@ jobs:
           poetry install
 
       - name: Build and publish to PyPI
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
         env:
           POETRY_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         run: |
