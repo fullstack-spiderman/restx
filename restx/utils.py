@@ -22,21 +22,33 @@ def crud_manager(
     CHOICE: str = method.upper()
     with Client() as client:
         if CHOICE == HTTPMethod.GET.value:
-            response: Response = client.get(url, headers=headers)
+            response: Response = client.get(
+                url,
+                headers=json.loads(headers) if headers else headers,
+            )
         elif CHOICE == HTTPMethod.POST.value:
             response: Response = client.post(
-                url, json=json.loads(payload), headers=headers
+                url,
+                json=json.loads(payload),
+                headers=json.loads(headers) if headers else headers,
             )
         elif CHOICE == HTTPMethod.PUT.value:
             response: Response = client.put(
-                url, json=json.loads(payload), headers=headers
+                url,
+                json=json.loads(payload),
+                headers=json.loads(headers) if headers else headers,
             )
         elif CHOICE == HTTPMethod.PATCH.value:
             response: Response = client.patch(
-                url, json=json.loads(payload), headers=headers
+                url,
+                json=json.loads(payload),
+                headers=json.loads(headers) if headers else headers,
             )
         elif CHOICE == HTTPMethod.DELETE.value:
-            response: Response = client.delete(url, headers=headers)
+            response: Response = client.delete(
+                url,
+                headers=json.loads(headers) if headers else headers,
+            )
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
     end_time: datetime = datetime.now()
