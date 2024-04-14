@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from httpx import Client, Response
+from rich import box
 from rich.console import Console
+from rich.table import Table
 
 from restx.enums import HTTPMethod
 
@@ -57,31 +59,49 @@ def crud_manager(
     return {"response": response, "response_time": response_time}
 
 
-def format_response(response: Response, response_time) -> dict[str, Any]:
-    """Format the response information."""
-    return {
-        "Status Code": response.status_code,
-        "HTTP Method": response.request.method,
-        "URL": response.url,
-        "Response Time": response_time,
-        "Headers": response.headers,
-        "Body": response.json(),
-    }
+def print_response_info(response: Response, response_time: timedelta) -> None:
+    """Pretty print the response information."""
+    console.rule("[bold]Response Information[/bold]", style="blue", align="center")
+
+    table = Table(box=box.SQUARE)
+    table.add_column("Field", style="cyan", justify="right")
+    table.add_column("Value", justify="left")
+
+    table.add_row("Status Code:", str(response.status_code))
+    table.add_row("HTTP Method:", response.request.method)
+    table.add_row("URL:", str(response.url))
+    table.add_row("Response Time:", str(response_time))
+
+    console.print(table)
 
 
-def print_additional_info(response: Response, response_time) -> None:
-    """Print additional information at the top."""
-    additional_info: str = f"Status Code: {response.status_code}\nHTTP Method: {response.request.method}\nURL: {response.url}\nResponse Time: {response_time}\nHeaders: {response.headers}\n\n"
-    console.print(additional_info, style="bold magenta")
+def print_response_headers(response: Response) -> None:
+    """Pretty print the response headers information."""
+    console.rule("[bold]Response Headers[/bold]", style="blue", align="center")
+
+    table = Table(box=box.SQUARE)
+    table.add_column("Header", style="cyan", justify="right")
+    table.add_column("Value", justify="left")
+
+    for name, value in response.headers.items():
+        table.add_row(f"{name}:", value)
+
+    console.print(table)
 
 
 def print_response_body(response: Response) -> None:
-    """Print the response body separately."""
+    """Pretty print the response body information."""
+    console.rule("[bold]Response Body[/bold]", style="blue", align="center")
     try:
-        data = response.json()
-        console.print(data, style="bold green")
-    except json.JSONDecodeError as e:
-        console.print(f"Error decoding JSON: {e}", style="bold red")
-        console.print(f"Raw response content: {response.content}", style="bold red")
-        console.print(f"Response status code: {response.status_code}", style="bold red")
-        console.print(f"Response headers: {response.headers}", style="bold red")
+        body = json.loads(response.text)
+        formatted_body: str = json.dumps(body, indent=4)
+        console.print(formatted_body)
+    except json.JSONDecodeError:
+        console.print(response.text)
+
+
+def print_full_response(response: Response, response_time: timedelta) -> None:
+    """Composition of all pretty print helper utils functions."""
+    print_response_info(response, response_time)
+    print_response_headers(response)
+    print_response_body(response)
