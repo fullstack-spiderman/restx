@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from httpx import Client, Response
+from rich import box
 from rich.console import Console
+from rich.table import Table
 
 from restx.enums import HTTPMethod
 
@@ -72,6 +74,19 @@ def print_additional_info(response: Response, response_time) -> None:
     """Print additional information at the top."""
     additional_info: str = f"Status Code: {response.status_code}\nHTTP Method: {response.request.method}\nURL: {response.url}\nResponse Time: {response_time}\nHeaders: {response.headers}\n\n"
     console.print(additional_info, style="bold magenta")
+
+
+def print_response_headers(response: Response) -> None:
+    console.rule("[bold]Response Headers[/bold]", style="blue", align="center")
+
+    table = Table(box=box.SQUARE)
+    table.add_column("Header", style="cyan", justify="right")
+    table.add_column("Value", justify="left")
+
+    for name, value in response.headers.items():
+        table.add_row(f"{name}:", value)
+
+    console.print(table)
 
 
 def print_response_body(response: Response) -> None:
