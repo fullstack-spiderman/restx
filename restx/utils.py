@@ -75,12 +75,10 @@ def print_additional_info(response: Response, response_time) -> None:
 
 
 def print_response_body(response: Response) -> None:
-    """Print the response body separately."""
+    console.rule("[bold]Response Body[/bold]", style="blue", align="center")
     try:
-        data = response.json()
-        console.print(data, style="bold green")
-    except json.JSONDecodeError as e:
-        console.print(f"Error decoding JSON: {e}", style="bold red")
-        console.print(f"Raw response content: {response.content}", style="bold red")
-        console.print(f"Response status code: {response.status_code}", style="bold red")
-        console.print(f"Response headers: {response.headers}", style="bold red")
+        body = json.loads(response.text)
+        formatted_body: str = json.dumps(body, indent=4)
+        console.print(formatted_body)
+    except json.JSONDecodeError:
+        console.print(response.text)
