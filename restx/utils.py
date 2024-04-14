@@ -58,18 +58,6 @@ def crud_manager(
     return {"response": response, "response_time": response_time}
 
 
-def format_response(response: Response, response_time: timedelta) -> dict[str, Any]:
-    """Format the response information."""
-    return {
-        "Status Code": response.status_code,
-        "HTTP Method": response.request.method,
-        "URL": response.url,
-        "Response Time": response_time,
-        "Headers": response.headers,
-        "Body": response.json(),
-    }
-
-
 def print_response_info(response: Response, response_time: timedelta) -> None:
     """Pretty print the response information."""
     console.rule("[bold]Response Information[/bold]", style="blue", align="center")
