@@ -70,10 +70,19 @@ def format_response(response: Response, response_time) -> dict[str, Any]:
     }
 
 
-def print_additional_info(response: Response, response_time) -> None:
-    """Print additional information at the top."""
-    additional_info: str = f"Status Code: {response.status_code}\nHTTP Method: {response.request.method}\nURL: {response.url}\nResponse Time: {response_time}\nHeaders: {response.headers}\n\n"
-    console.print(additional_info, style="bold magenta")
+def print_response_info(response, response_time):
+    console.rule("[bold]Response Information[/bold]", style="blue", align="center")
+
+    table = Table(box=box.SQUARE)
+    table.add_column("Field", style="cyan", justify="right")
+    table.add_column("Value", justify="left")
+
+    table.add_row("Status Code:", str(response.status_code))
+    table.add_row("HTTP Method:", response.request.method)
+    table.add_row("URL:", str(response.url))
+    table.add_row("Response Time:", str(response_time))
+
+    console.print(table)
 
 
 def print_response_headers(response: Response) -> None:
