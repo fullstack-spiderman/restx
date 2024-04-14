@@ -58,7 +58,7 @@ def crud_manager(
     return {"response": response, "response_time": response_time}
 
 
-def format_response(response: Response, response_time) -> dict[str, Any]:
+def format_response(response: Response, response_time: timedelta) -> dict[str, Any]:
     """Format the response information."""
     return {
         "Status Code": response.status_code,
@@ -70,7 +70,8 @@ def format_response(response: Response, response_time) -> dict[str, Any]:
     }
 
 
-def print_response_info(response, response_time):
+def print_response_info(response: Response, response_time: timedelta) -> None:
+    """Pretty print the response information."""
     console.rule("[bold]Response Information[/bold]", style="blue", align="center")
 
     table = Table(box=box.SQUARE)
@@ -86,6 +87,7 @@ def print_response_info(response, response_time):
 
 
 def print_response_headers(response: Response) -> None:
+    """Pretty print the response headers information."""
     console.rule("[bold]Response Headers[/bold]", style="blue", align="center")
 
     table = Table(box=box.SQUARE)
@@ -99,6 +101,7 @@ def print_response_headers(response: Response) -> None:
 
 
 def print_response_body(response: Response) -> None:
+    """Pretty print the response body information."""
     console.rule("[bold]Response Body[/bold]", style="blue", align="center")
     try:
         body = json.loads(response.text)
@@ -106,3 +109,10 @@ def print_response_body(response: Response) -> None:
         console.print(formatted_body)
     except json.JSONDecodeError:
         console.print(response.text)
+
+
+def print_full_response(response: Response, response_time: timedelta) -> None:
+    """Composition of all pretty print helper utils functions."""
+    print_response_info(response, response_time)
+    print_response_headers(response)
+    print_response_body(response)
