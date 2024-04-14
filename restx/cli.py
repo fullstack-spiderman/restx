@@ -1,7 +1,10 @@
 import typer
 from rich.console import Console
 
-from restx.utils import crud_manager, print_additional_info, print_response_body
+from restx.utils import (
+    crud_manager,
+    print_full_response as pretty_print_response,
+)
 
 
 app = typer.Typer()
@@ -17,8 +20,7 @@ def get(
     response, response_time = crud_manager(
         url=url, method="GET", headers=headers
     ).values()
-    print_additional_info(response, response_time)
-    print_response_body(response)
+    pretty_print_response(response, response_time)
 
 
 @app.command()
@@ -31,8 +33,7 @@ def post(
     response, response_time = crud_manager(
         url=url, method="POST", payload=payload, headers=headers
     ).values()
-    print_additional_info(response, response_time)
-    print_response_body(response)
+    pretty_print_response(response, response_time)
 
 
 @app.command()
@@ -45,8 +46,7 @@ def put(
     response, response_time = crud_manager(
         url=url, method="PUT", payload=payload, headers=headers
     ).values()
-    print_additional_info(response, response_time)
-    print_response_body(response)
+    pretty_print_response(response, response_time)
 
 
 @app.command()
@@ -59,8 +59,7 @@ def patch(
     response, response_time = crud_manager(
         url=url, method="PATCH", payload=payload, headers=headers
     ).values()
-    print_additional_info(response, response_time)
-    print_response_body(response)
+    pretty_print_response(response, response_time)
 
 
 @app.command()
@@ -72,8 +71,7 @@ def delete(
     response, response_time = crud_manager(
         url=url, method="DELETE", headers=headers
     ).values()
-    print_additional_info(response, response_time)
-    print_response_body(response)
+    pretty_print_response(response, response_time)
 
 
 if __name__ == "__main__":
