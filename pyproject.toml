@@ -15,12 +15,23 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 description = "A CLI app for performing REST API CRUD operations via HTTP/HTTPS requests."
+documentation = "https://www.linkedin.com/pulse/introducing-restx-your-ultimate-cli-tool-http-arjun-umathanu-ugrrc/"
+homepage = "https://pypi.org/project/restx/"
 include = [
   "LICENSE",
 ]
+keywords = [
+  "restx",
+  "http",
+  "client",
+  "api",
+  "rest",
+]
 license = "MIT"
+maintainers = ["Arjun Umathanu"]
 name = "restx"
 readme = "README.md"
+repository = "https://github.com/fullstack-spiderman/restx"
 version = "0.1.13"
 
 [tool.poetry.dependencies]
@@ -43,8 +54,3 @@ requires = ["poetry-core"]
 
 [tool.poetry.scripts]
 restx = "restx.cli:app"
-
-# Documentation links
-documentation = "https://www.linkedin.com/pulse/introducing-restx-your-ultimate-cli-tool-http-arjun-umathanu-ugrrc/"
-homepage = "https://pypi.org/project/restx/"
-repository = "https://github.com/fullstack-spiderman/restx"
