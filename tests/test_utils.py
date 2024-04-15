@@ -1,116 +1,132 @@
 import json
 from datetime import timedelta
-from typing import Any
+from typing import Any, Literal
 
+import pytest
 from pytest_httpx import HTTPXMock
 
 from restx.enums import HTTPMethod
 from restx.utils import crud_manager
 
+URL: str = "https://example.com/users"
 
-def test_crud_manager_get(httpx_mock: HTTPXMock) -> None:
+
+def assert_crud_manager(
+    httpx_mock: HTTPXMock,
+    http_method: HTTPMethod,
+    url: str,
+    payload: str,
+    disable_ssl_verify: bool,
+    follow_redirects: bool,
+    status_code: Literal[200] | Literal[201] | Literal[204],
+) -> None:
     # Arrange
-    url = "https://example.com"
-    headers: dict[str, str] = {"Authorization": "Bearer token"}
-    response_data: dict[str, str] = {"status": "success"}
-    httpx_mock.add_response(method="GET", status_code=200, url=url, json=response_data)
-
-    # Act
-    result: dict[str, Any] = crud_manager(
-        url=url, method=HTTPMethod.GET.value, headers=json.dumps(headers)
-    )
-
-    # Assert
-    assert result["response"].status_code == 200
-    assert isinstance(result["response_time"], timedelta)
-    assert result["response"].json() == response_data
-
-
-def test_crud_manager_post(httpx_mock: HTTPXMock) -> None:
-    # Arrange
-    url = "https://example.com"
-    payload: dict[str, str] = {"key": "value"}
-    headers: dict[str, str] = {"Authorization": "Bearer token"}
-    response_data: dict[str, str] = {"status": "success"}
-    httpx_mock.add_response(method="POST", status_code=201, url=url, json=response_data)
-
-    # Act
-    result: dict[str, Any] = crud_manager(
-        url=url,
-        method=HTTPMethod.POST.value,
-        payload=json.dumps(payload),
-        headers=json.dumps(headers),
-    )
-
-    # Assert
-    assert result["response"].status_code == 201
-    assert isinstance(result["response_time"], timedelta)
-    assert result["response"].json() == response_data
-
-
-def test_crud_manager_put(httpx_mock: HTTPXMock) -> None:
-    # Arrange
-    url = "https://example.com/5"
-    payload: dict[str, str] = {"key": "value"}
-    headers: dict[str, str] = {"Authorization": "Bearer token"}
-    response_data: dict[str, str] = {"status": "success"}
-    httpx_mock.add_response(method="PUT", status_code=200, url=url, json=response_data)
-
-    # Act
-    result: dict[str, Any] = crud_manager(
-        url=url,
-        method=HTTPMethod.PUT.value,
-        payload=json.dumps(payload),
-        headers=json.dumps(headers),
-    )
-
-    # Assert
-    assert result["response"].status_code == 200
-    assert isinstance(result["response_time"], timedelta)
-    assert result["response"].json() == response_data
-
-
-def test_crud_manager_patch(httpx_mock: HTTPXMock) -> None:
-    # Arrange
-    url = "https://example.com/13"
-    payload: dict[str, str] = {"key": "value"}
     headers: dict[str, str] = {"Authorization": "Bearer token"}
     response_data: dict[str, str] = {"status": "success"}
     httpx_mock.add_response(
-        method="PATCH", status_code=200, url=url, json=response_data
+        method=http_method.value, status_code=status_code, url=url, json=response_data
     )
 
     # Act
-    result: dict[str, Any] = crud_manager(
+    result_without_options: dict[str, Any] = crud_manager(
         url=url,
-        method=HTTPMethod.PATCH.value,
-        payload=json.dumps(payload),
+        method=http_method.value,
         headers=json.dumps(headers),
+        disable_ssl_verify=disable_ssl_verify,
+        follow_redirects=follow_redirects,
+        payload=payload,
     )
 
     # Assert
-    assert result["response"].status_code == 200
-    assert isinstance(result["response_time"], timedelta)
-    assert result["response"].json() == response_data
+    assert result_without_options["response"].status_code == status_code
+    assert isinstance(result_without_options["response_time"], timedelta)
+    assert result_without_options["response"].json() == response_data
 
 
-def test_crud_manager_delete(httpx_mock: HTTPXMock) -> None:
-    # Arrange
-    url = "https://example.com/4"
-    headers: dict[str, str] = {"Authorization": "Bearer token"}
-    response_data: dict[str, str] = {}
-    httpx_mock.add_response(
-        method="DELETE", status_code=204, url=url, json=response_data
-    )
-
-    # Act
-    result: dict[str, Any] = crud_manager(
+@pytest.mark.parametrize(
+    "http_method, url, payload, disable_ssl_verify, follow_redirects, status_code",
+    [
+        (HTTPMethod.GET, URL, None, False, False, 200),
+        (
+            HTTPMethod.POST,
+            URL,
+            '{"key": "value"}',
+            False,
+            False,
+            201,
+        ),
+        (
+            HTTPMethod.PUT,
+            f"{URL}/1",
+            '{"key": "value"}',
+            False,
+            False,
+            200,
+        ),
+        (
+            HTTPMethod.PATCH,
+            f"{URL}/1",
+            '{"key": "value"}',
+            False,
+            False,
+            200,
+        ),
+        (HTTPMethod.DELETE, f"{URL}/1", None, False, False, 204),
+        (HTTPMethod.GET, f"{URL}/", None, True, True, 200),
+        (
+            HTTPMethod.POST,
+            f"{URL}/",
+            '{"key": "value"}',
+            True,
+            True,
+            201,
+        ),
+        (
+            HTTPMethod.PUT,
+            f"{URL}/1/",
+            '{"key": "value"}',
+            True,
+            True,
+            200,
+        ),
+        (
+            HTTPMethod.PATCH,
+            f"{URL}/1/",
+            '{"key": "value"}',
+            True,
+            True,
+            200,
+        ),
+        (HTTPMethod.DELETE, f"{URL}/1/", None, True, True, 204),
+    ],
+    ids=[
+        "GET - Users - Default SSL - No Redirects",
+        "POST - Users - Default SSL - No Redirects",
+        "PUT - Patch User - Default SSL - No Redirects",
+        "PATCH - User - Default SSL - No Redirects",
+        "DELETE - User - Default SSL - No Redirects",
+        "GET - Users - Disable SSL - Follow Redirects",
+        "POST - Users - Disable SSL - Follow Redirects",
+        "PUT - Patch User - Disable SSL - Follow Redirects",
+        "PATCH - User - Disable SSL - Follow Redirects",
+        "DELETE - User - Disable SSL - Follow Redirects",
+    ],
+)
+def test_crud_manager(
+    httpx_mock: HTTPXMock,
+    http_method: HTTPMethod,
+    url: str,
+    payload: str,
+    disable_ssl_verify: bool,
+    follow_redirects: bool,
+    status_code: Literal[200] | Literal[201] | Literal[204],
+) -> None:
+    assert_crud_manager(
+        httpx_mock=httpx_mock,
+        http_method=http_method,
         url=url,
-        method=HTTPMethod.DELETE.value,
-        headers=json.dumps(headers),
+        payload=payload,
+        disable_ssl_verify=disable_ssl_verify,
+        follow_redirects=follow_redirects,
+        status_code=status_code,
     )
-
-    # Assert
-    assert result["response"].status_code == 204
-    assert isinstance(result["response_time"], timedelta)
-    assert result["response"].json() == response_data

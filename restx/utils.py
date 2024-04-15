@@ -18,11 +18,16 @@ def crud_manager(
     payload=None,
     headers=None,
     method: str = DEFAULT_METHOD,
+    disable_ssl_verify: bool = False,
+    follow_redirects: bool = False,
 ) -> dict[str, Any]:
     """Perform an HTTP request based on the user choice."""
     start_time: datetime = datetime.now()
     CHOICE: str = method.upper()
-    with Client() as client:
+    with Client(
+        verify=not disable_ssl_verify,
+        follow_redirects=follow_redirects,
+    ) as client:
         match CHOICE:
             case HTTPMethod.GET.value:
                 response: Response = client.get(
