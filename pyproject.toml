@@ -44,8 +44,7 @@ requires = ["poetry-core"]
 [tool.poetry.scripts]
 restx = "restx.cli:app"
 
-[tool.poetry.documentation]
-article = "https://www.linkedin.com/pulse/introducing-restx-your-ultimate-cli-tool-http-arjun-umathanu-ugrrc/"
-documentation = "https://github.com/fullstack-spiderman/restx/blob/main/README.md"
+# Documentation links
+documentation = "https://www.linkedin.com/pulse/introducing-restx-your-ultimate-cli-tool-http-arjun-umathanu-ugrrc/"
 homepage = "https://pypi.org/project/restx/"
 repository = "https://github.com/fullstack-spiderman/restx"
